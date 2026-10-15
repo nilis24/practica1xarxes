@@ -67,7 +67,23 @@ struct in_addr
 /* -1 si hi ha error.                                                     */
 int TCP_CreaSockClient(const char *IPloc, int portTCPloc)
 {
+     int scon;//file descriptor
+    struct sockaddr_in adrloc; //estructura per a guardar la @IP i el port
+    int iploc;
+    int portloc;
 
+    if ((scon = socket(AF_INET, SOCK_STREAM, 0)) == -1) { //es fa que el sistema operatiu creï el socket
+        return -1; //si no s'ha creat el socket, es retorna -1
+        
+        
+        
+         if (strcmp(IPloc, "0.0.0.0") != 0 || portTCPloc != 0) { //assignació implicita
+        if (bind(scon, (struct sockaddr*)&adrloc, sizeof(adrloc)) == -1) { //converció a struct
+           perror("Error en bind"); close(scon); exit(-1);   //return -1;
+        } //getsockname() 
+    }
+
+    return scon; //numero del socket
 }
 
 /* Crea un socket TCP “servidor” (o en estat d’escolta – listen –) a      */
@@ -129,7 +145,30 @@ int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) //Nil
 /* -1 si hi ha error.                                                     */
 int TCP_DemanaConnexio(int Sck, const char *IPrem, int portTCPrem)
 {
-	
+	//Sck->descriptor de socket
+	//Iprem->direcció servidor IP remot
+	//portTCPrem->Port TCP remot
+
+struct sockaddr_in adrrem;//estructura per a guardar la direcció del servidor
+
+    adrrem.sin_family = AF_INET; //AF_INET->IPv4 
+    adrrem.sin_port = htons(portTCPrem); //es guarda el port del servidor
+    adrrem.sin_addr.s_addr = inet_addr(IPrem); //es guarda IP del servidor
+    for(int i=0;i<8;i++){adrrem.sin_zero[i]='\0';}
+    
+    //memset(adrrem.sin_zero, 0, sizeof(adrrem.sin_zero));//es posa el camp sin_zero a 0
+
+    if (connect(Sck, (struct sockaddr*)&adrrem, sizeof(adrrem)) == -1) {//es realitza la connexió
+       
+       perror("Error en connect");
+       close(Sck);
+       exit(-1);
+       
+        //return -1;//si no es pot establir la connexió es retorna -1
+    }
+
+    return 0;
+
 }
 
 /* El socket TCP “servidor” d’identificador “Sck” accepta fer una         */
@@ -179,6 +218,20 @@ int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) //Nil
 /* -1 si hi ha error.                                                     */
 int TCP_Envia(int Sck, const char *SeqBytes, int LongSeqBytes)
 {
+	//Sck->on escriure
+	//SeqBytes->qué escriure
+	//LongSeqBytes->quant escriure
+	
+	
+	int bytes_escrits = (int)write(Sck, SeqBytes, LongSeqBytes); //es realitza l'enviament
+    if((bytes_escrits=write(scon,buffer,bytes_llegits))==-1)
+	{
+	perror("Error en write");
+	close(scon);
+	exit(-1);
+	}
+    //if (bytes_escrits == -1) return -1; //comprobació si hi ha hagut algun error
+    return bytes_escrits; //quantitat de bytes escrits
 	
 }
 
@@ -207,6 +260,9 @@ int TCP_Rep(int Sck, char *SeqBytes, int LongSeqBytes) //Nil
 /* -1 si hi ha error.                                                     */
 int TCP_TancaSock(int Sck)
 {
+	if (close(Sck) == -1) return -1;
+    return 0;
+	
 	
 }
 
