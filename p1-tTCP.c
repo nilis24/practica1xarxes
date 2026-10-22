@@ -85,6 +85,7 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc)
 
     return scon; //numero del socket
 }
+}
 
 /* Crea un socket TCP “servidor” (o en estat d’escolta – listen –) a      */
 /* l’@IP “IPloc” i #port TCP “portTCPloc” (si “IPloc” és “0.0.0.0” i/o    */
@@ -222,12 +223,13 @@ int TCP_Envia(int Sck, const char *SeqBytes, int LongSeqBytes)
 	//SeqBytes->qué escriure
 	//LongSeqBytes->quant escriure
 	
-	
+	char buffer [200];
+	int bytes_llegits;
 	int bytes_escrits = (int)write(Sck, SeqBytes, LongSeqBytes); //es realitza l'enviament
-    if((bytes_escrits=write(scon,buffer,bytes_llegits))==-1)
+    if((bytes_escrits=write(Sck,buffer,bytes_llegits))==-1)
 	{
 	perror("Error en write");
-	close(scon);
+	close(Sck);
 	exit(-1);
 	}
     //if (bytes_escrits == -1) return -1; //comprobació si hi ha hagut algun error
