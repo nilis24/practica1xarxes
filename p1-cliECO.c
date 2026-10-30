@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
             int numBitsRebuts = TCP_Rep(Socket, missatge, (int)sizeof(missatge));
             if (numBitsRebuts > 0) {
                 if (numBitsRebuts < (int)sizeof(missatge)) missatge[numBitsRebuts] = '\0';
-               printf("Retornat pel servidor: %s", missatge);
+                   printf("Retornat pel servidor: %s", missatge);
             } else if (numBitsRebuts == 0) {
                 printf("El servidor ha tancat la connexio\n");
                 break;
