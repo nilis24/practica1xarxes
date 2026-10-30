@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     /* Ara iprem i portrem contenen l'adreça del socket remot (@IP i #port TCP).            */
     printf("Connexió acceptada de %s:%d\n", iprem, portrem);
 
-    if (TCP_TrobaAdrSockLoc(sesc, iploc, &portloc) == 0 && TCP_TrobaAdrSockRem(sesc, iprem, &portrem) == 0) {
+    if (TCP_TrobaAdrSockLoc(scon, iploc, &portloc) == 0 && TCP_TrobaAdrSockRem(scon, iprem, &portrem) == 0) {
         printf("Socket local: %s %d\n", iploc, portloc);
         printf("Socket remot: %s %d\n", iprem, portrem);
     }
@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
     /* tanca la connexió (read() retorna 0).                                                */
     while ((bytes_llegits = TCP_Rep(scon, buffer, sizeof(buffer))) > 0) {
         printf("%.*s", bytes_llegits, buffer);
+        printf("Bytes rebuts: %d\n", bytes_llegits);
         fflush(stdout);
         bytes_escrits = TCP_Envia(scon, buffer, bytes_llegits);
         if (bytes_escrits == -1) {
