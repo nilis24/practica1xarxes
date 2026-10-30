@@ -74,6 +74,11 @@ int main(int argc, char *argv[])
     /* Ara iprem i portrem contenen l'adreça del socket remot (@IP i #port TCP).            */
     printf("Connexió acceptada de %s:%d\n", iprem, portrem);
 
+    if (TCP_TrobaAdrSockLoc(sesc, iploc, &portloc) == 0 && TCP_TrobaAdrSockRem(sesc, iprem, &portrem) == 0) {
+        printf("Socket local: %s %d\n", iploc, portloc);
+        printf("Socket remot: %s %d\n", iprem, portrem);
+    }
+
     /* 5) Crida read() i write()                                                            */
     /* Es retorna (ECO) pel socket connectat scon tot el que hi arriba, fins que el client  */
     /* tanca la connexió (read() retorna 0).                                                */
