@@ -78,6 +78,8 @@ int main(int argc, char *argv[])
     /* Es retorna (ECO) pel socket connectat scon tot el que hi arriba, fins que el client  */
     /* tanca la connexió (read() retorna 0).                                                */
     while ((bytes_llegits = TCP_Rep(scon, buffer, sizeof(buffer))) > 0) {
+        printf("%.*s", bytes_llegits, buffer);
+        fflush(stdout);
         bytes_escrits = TCP_Envia(scon, buffer, bytes_llegits);
         if (bytes_escrits == -1) {
             int error;
@@ -90,7 +92,6 @@ int main(int argc, char *argv[])
         printf("Error al rebre el missatge: %s\n", T_ObteTextRes(&error));
         exit(-1);
     }
-
     /* 6) Crida close()                                                                     */
     /* Es tanca el socket scon, que com que és un socket TCP, també vol dir que es tanca la */
     /* connexió TCP establerta, i es tanca el socket d'escolta sesc.                        */
