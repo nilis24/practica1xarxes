@@ -227,6 +227,40 @@ int TCP_Rep(int Sck, char *SeqBytes, int LongSeqBytes) //Nil
     return read(Sck, SeqBytes, LongSeqBytes);
 }
 
+
+/* Rep una línia (fins al delimitador '\n', inclòs) pel socket "Sck".     */
+/* Escriu la línia a "Linia" acabada en '\0' (LongMax inclou el '\0').    */
+/* Retorna: nombre de bytes de la línia si tot va bé;                     */
+/*          0 si la connexió s'ha tancat abans de rebre cap byte;         */
+/*         -1 si hi ha error.                                             */
+int TCP_RepLinia(int Sck, char *Linia, int LongMax)
+{
+    int n = 0;
+    int r;
+    char c;
+
+    while (n < LongMax - 1) {
+        r = (int)read(Sck, &c, 1);
+        if (r == -1) return -1;
+        if (r == 0) {
+            if (n == 0) return 0;
+            break;
+        }
+        Linia[n++] = c;
+        if (c == '\n') break;
+    }
+    Linia[n] = '\0';
+    return n;
+}
+
+
+
+
+
+
+
+
+
 /* S’allibera (s’esborra) el socket TCP d’identificador “Sck”; si “Sck”   */
 /* està connectat es tanca la connexió TCP que té establerta.             */
 /*                                                                        */
