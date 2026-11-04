@@ -81,8 +81,10 @@ int main(int argc, char *argv[])
 
     /* 5) Crida read() i write()                                                            */
     /* Es retorna (ECO) pel socket connectat scon tot el que hi arriba, fins que el client  */
-    /* tanca la connexió (read() retorna 0).                                                */
-    while ((bytes_llegits = TCP_Rep(scon, buffer, sizeof(buffer))) > 0) {
+    /* tanca la connexió (read() retorna 0). 
+    */
+                                                    
+    while ((bytes_llegits = TCP_RepLinia(scon, buffer, sizeof(buffer))) > 0) {
         printf("%.*s", bytes_llegits, buffer);
         printf("Bytes rebuts: %d\n", bytes_llegits);
         fflush(stdout);
